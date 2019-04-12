@@ -38,23 +38,14 @@ function promptUser() {
         })
         .then(function (answer) {
 
-            sqlQueryItem(answer.itemID)
+            var stock = sqlQueryQuantity(answer.itemID);
+
+            if(answer.itemQuantity > stock) {
+                console.log("Sorry, we do not have enough of that item in stock")
+            }
 
         })
 
-}
-
-
-function sqlQueryItem(id) {
-
-    connection.query(
-        "SELECT * FROM products WHERE id = ?",
-        {
-            item_id: "id"
-        },
-        function (err, res) {
-
-        });
 }
 
 function sqlQueryQuantity(id) {
