@@ -18,8 +18,24 @@ connection.connect(function (err) {
     if (err) throw err;
 
     promptUser();
-});
+    inquirer.prompt(
+        {
 
+            name: "anotherOne",
+            type: "confirm",
+            message: "Would you like to purchase another item?"
+        })
+        .then(function (answer) {
+
+            if(answer.anotherOne === true) {
+                promptUser();
+            } else if(answer.anotherOne === false) {
+                console.log("Thank you for your purchase(s)! Have a nice day.");
+                connection.end();
+            }
+
+        });
+});
 
 function promptUser() {
 
@@ -40,8 +56,13 @@ function promptUser() {
 
             var stock = sqlQueryQuantity(answer.itemID);
 
-            if(answer.itemQuantity > stock) {
+            if (answer.itemQuantity > stock) {
                 console.log("Sorry, we do not have enough of that item in stock")
+            } else {
+
+                connection.query()
+
+
             }
 
         })
@@ -61,5 +82,5 @@ function sqlQueryQuantity(id) {
 
         });
 
-        return res;
+    return res;
 }
