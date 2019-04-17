@@ -9,7 +9,7 @@ var connection = mysql.createConnection({
 
     user: "root",
 
-    password: "",
+    password: "Fhqwhgads1!",
     database: "bamazonDB"
 });
 
@@ -18,23 +18,7 @@ connection.connect(function (err) {
     if (err) throw err;
 
     promptUser();
-    inquirer.prompt(
-        {
 
-            name: "anotherOne",
-            type: "confirm",
-            message: "Would you like to purchase another item?"
-        })
-        .then(function (answer) {
-
-            if(answer.anotherOne === true) {
-                promptUser();
-            } else if(answer.anotherOne === false) {
-                console.log("Thank you for your purchase(s)! Have a nice day.");
-                connection.end();
-            }
-
-        });
 });
 
 function promptUser() {
@@ -54,33 +38,33 @@ function promptUser() {
         })
         .then(function (answer) {
 
-            var stock = sqlQueryQuantity(answer.itemID);
+            sqlQueryQuantity(answer.itemID, function(stock){
 
-            if (answer.itemQuantity > stock) {
-                console.log("Sorry, we do not have enough of that item in stock")
-            } else {
+                if (answer.itemQuantity > stock) {
+                    console.log("Sorry, we do not have enough of that item in stock")
+                } else {
+    
+                    connection.query()
+    
+    
+                }
 
-                connection.query()
-
-
-            }
+            });
 
         })
-
 }
 
-function sqlQueryQuantity(id) {
+function sqlQueryQuantity(id, callback) {
 
     connection.query(
-        "SELECT stock_quantity FROM products WHERE item_id = ?",
+        "SELECT stock_quantity FROM products WHERE = ?",
         {
             item_id: id
         },
         function (err, res) {
 
-            return res;
+            callback(res[0].stock_quantity);
 
         });
 
-    return res;
 }
