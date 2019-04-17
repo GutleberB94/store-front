@@ -23,7 +23,7 @@ connection.connect(function (err) {
 
 function promptUser() {
 
-    inquirer.prompt(
+    inquirer.prompt([
         {
 
             name: "itemID",
@@ -35,34 +35,35 @@ function promptUser() {
             type: "number",
             message: "How many do you want to purchase?"
 
-        })
+        },
+    ])
         .then(function (answer) {
 
-            sqlQueryQuantity(answer.itemID, function(stock){
-
+            sqlQueryQuantity(answer.itemID, function (stock) {
+                console.log(stock)
                 if (answer.itemQuantity > stock) {
+
                     console.log("Sorry, we do not have enough of that item in stock")
                 } else {
-    
-                    connection.query()
-    
-    
+                    
+                    console.log("give price and update stock")
+                    //connection.query()
+
                 }
-
             });
-
         })
 }
 
 function sqlQueryQuantity(id, callback) {
 
     connection.query(
-        "SELECT stock_quantity FROM products WHERE = ?",
+        "SELECT stock_quantity FROM products WHERE ?",
         {
             item_id: id
         },
         function (err, res) {
 
+            console.log(res[0].stock_quantity)
             callback(res[0].stock_quantity);
 
         });
