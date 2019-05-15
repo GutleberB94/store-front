@@ -46,8 +46,11 @@ function promptUser() {
                     console.log("Sorry, we do not have enough of that item in stock")
                 } else {
                     
-                    console.log("give price and update stock")
-                    //connection.query()
+                        sqlQueryUpdate(answer.itemID, answer.itemQuantity, function (cost) {
+
+                        console.log("Your Total Cost Is: $" + cost);
+
+                    })
 
                 }
             });
@@ -65,6 +68,28 @@ function sqlQueryQuantity(id, callback) {
 
             console.log(res[0].stock_quantity)
             callback(res[0].stock_quantity);
+
+        });
+
+}
+
+function sqlQueryUpdate(id, quantity, callback) {
+
+    connection.query(
+        "UPDATE products SET ? WHERE ?",
+        [
+            {
+                stock_quantity: - quantity
+            },
+            {
+                item_id: id
+            }
+        ],
+        function (err, res) {
+
+            var cost = quantity + res[0].price;
+            console.log(cost)
+            callback(cost);
 
         });
 
